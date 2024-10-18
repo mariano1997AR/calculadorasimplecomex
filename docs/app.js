@@ -11,6 +11,7 @@ const selectElement = document.getElementById('miSelect');
 const baseImpIva = document.getElementById('baseImpIva');
 const form = document.getElementById('form');
 const inputs = form.querySelectorAll('input');
+const totalPrecio = document.getElementById('total-precio');
 
 //cargar el envio
 const envios = document.getElementById('envios');
@@ -45,10 +46,13 @@ class CalculadoraImpuestos{
                     let calcularFlete = this.calcularFlete(this.peso);  
                     let calcularSeguro = this.calcularSeguro(calcularFlete,this.valor);            
                     let valorAduana = this.calcularBaseCalculo(this.valor, calcularFlete,calcularSeguro);
-                    resultadoFlete.innerHTML = `<h4>$${calcularFlete}</h4>`;
-                    resultadoSeguro.innerHTML = `<h4>$${calcularSeguro}</h4>`;
-                    baseCalculo.innerHTML = `<h4>$${valorAduana}</h4>`;
-                    this.obtenerDatoJson(descripcion,estadistica,derecho,otros,posicion,iva,valorAduana);
+                    let valorFlete = this.valorFlete(this.peso);
+                    //clase css
+                    resultadoFlete.classList.add('linea-horizontal');
+                    resultadoFlete.innerHTML = `<h4>Flete: U$D ${valorFlete}</h4>`;
+                   // resultadoSeguro.innerHTML = `<h4>Seguro: $${calcularSeguro}</h4>`;
+                   // baseCalculo.innerHTML = `<h4>$${valorAduana}</h4>`;
+                    this.obtenerDatoJson(descripcion,estadistica,derecho,otros,posicion,iva,valorAduana,valorFlete);
     
                 }
           
@@ -62,10 +66,17 @@ class CalculadoraImpuestos{
 
 
     calcularFlete(peso){
-       const precioKG = 3;
-       let flete = precioKG * peso; 
+       let precioKG = 3;
+       let flete = (precioKG * peso); 
        return flete;
       
+    }
+    valorFlete(peso){
+       let precioEnvioFijo = 4; //en dolares
+       let flete = peso * precioEnvioFijo;
+       return  flete;
+
+
     }
 
     calcularSeguro(flete,valor){
@@ -109,11 +120,11 @@ class CalculadoraImpuestos{
 
     obtenerResultadoSelect(){
        selectElement.addEventListener('change',()=>{
-             producto.innerHTML = `<h4>${selectElement.value}<h4>`; 
+             producto.innerHTML = `<h4>PRODUCTO: ${selectElement.value}<h4>`; 
        });
     }
 
-    obtenerDatoJson(descripcion,estadistica,derecho,otros,posicion,iva,valorAduana){
+    obtenerDatoJson(descripcion,estadistica,derecho,otros,posicion,iva,valorAduana,valorFlete){
          //guardar los datos en un array
         let calcularBaseImpositiva;
         let agregarIva,porcentajeIva,calcularIva;
@@ -142,8 +153,13 @@ class CalculadoraImpuestos{
                          baseImp.innerHTML = 'sin datos';
                          baseImpIva.innerHTML = 'Sin datos';
                      }else{
-                        baseImp.innerHTML = `<h4>$${calcularBaseImpositiva}</h4>`;
-                        baseImpIva.innerHTML = `<h4>$${calcularIva}</h4>`;
+                        //baseImp.innerHTML = `<h4>$${calcularBaseImpositiva}</h4>`;
+                        baseImpIva.innerHTML = `<h4>IMPUESTOS:U$D${calcularIva}</h4>`;
+                        let total =parseFloat(valorFlete + parseFloat(calcularIva)); 
+                        console.log(total);
+                        console.log(typeof valorFlete);
+                        console.log(typeof calcularIva);
+                        totalPrecio.innerHTML = `<h4>COSTO TOTAL DEL ENVIO: U$D ${total}</h4>`
                      }
                     
 
@@ -189,7 +205,9 @@ const Main = ()=>{
        let allFieldsFilled = true;
 
       inputs.forEach(input => {
-       if (input.value.trim() === '') { // Verifica si el campo está vacío (o tiene solo espacios)
+       //convertimos a numeros
+
+       if ((input.value.trim() === '') && (typeof input.value) ===  "string") { // Verifica si el campo está vacío (o tiene solo espacios)
          allFieldsFilled = false;
       }
     });
