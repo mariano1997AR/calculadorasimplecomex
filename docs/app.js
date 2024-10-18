@@ -160,7 +160,7 @@ class CalculadoraImpuestos{
                         console.log(total);
                         console.log(typeof valorFlete);
                         console.log(typeof calcularIva);
-                        totalPrecio.innerHTML = `<h4>COSTO TOTAL DEL ENVIO: U$D ${total}</h4>`
+                        totalPrecio.innerHTML = `<h4 class=" text-warning">COSTO TOTAL DEL ENVIO: U$D ${total}</h4>`
                      }
                     
 
