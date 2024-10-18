@@ -49,7 +49,7 @@ class CalculadoraImpuestos{
                     let valorFlete = this.valorFlete(this.peso);
                     //clase css
                     resultadoFlete.classList.add('linea-horizontal');
-                    resultadoFlete.innerHTML = `<h4>Flete: U$D ${valorFlete}</h4>`;
+                    resultadoFlete.innerHTML = `<h4>FLETE: U$D ${valorFlete}</h4>`;
                    // resultadoSeguro.innerHTML = `<h4>Seguro: $${calcularSeguro}</h4>`;
                    // baseCalculo.innerHTML = `<h4>$${valorAduana}</h4>`;
                     this.obtenerDatoJson(descripcion,estadistica,derecho,otros,posicion,iva,valorAduana,valorFlete);
@@ -120,7 +120,7 @@ class CalculadoraImpuestos{
 
     obtenerResultadoSelect(){
        selectElement.addEventListener('change',()=>{
-             producto.innerHTML = `<h4>PRODUCTO: ${selectElement.value}<h4>`; 
+             producto.innerHTML = `<h4>PRODUCTO: ${selectElement.value}</h4>`; 
        });
     }
 
@@ -136,7 +136,9 @@ class CalculadoraImpuestos{
               data.forEach(item => { 
                   estadistica.push(item.estadist);
                   derecho.push(item.derecho);
-                  descripcion.push(item.descripcion);
+                  if(!descripcion.includes(item)){
+                     descripcion.push(item.descripcion);
+                  }
                   iva.push(item.iva);
                   otros.push(item.otros);
                   posicion.push(item.posicion);
@@ -148,7 +150,6 @@ class CalculadoraImpuestos{
                      agregarIva = calcularBaseImpositiva * porcentajeIva;
                      calcularIva = (calcularBaseImpositiva + agregarIva + parseInt(item.otros)).toFixed(2);
 
-                     console.log(parseFloat(calcularIva));
                      if((calcularBaseImpositiva == NaN) && (calcularIva == NaN)){
                          baseImp.innerHTML = 'sin datos';
                          baseImpIva.innerHTML = 'Sin datos';
