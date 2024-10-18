@@ -1,0 +1,1 @@
+error en reglas de configuracion en usar fetch solo se puede obtener de un servidor 
