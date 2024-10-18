@@ -8,10 +8,19 @@ const baseCalculo = document.getElementById('baseCalculo');
 const producto = document.getElementById('producto');
 const baseImp = document.getElementById('baseImp');
 const selectElement = document.getElementById('miSelect');
+//es para obtener el valor de base impositiva con iva
 const baseImpIva = document.getElementById('baseImpIva');
+//es el formulario general
 const form = document.getElementById('form');
+//son los campos de entrada
 const inputs = form.querySelectorAll('input');
+//calcular el total precio con iva + flete
 const totalPrecio = document.getElementById('total-precio');
+//es para calcular el valor en pesos de dolares
+const resultadoPesos = document.getElementById('total-precio-pesos');
+
+//variable global al programa 
+var cotizacion_dolar;
 
 //cargar el envio
 const envios = document.getElementById('envios');
@@ -125,7 +134,7 @@ class CalculadoraImpuestos{
     }
 
     obtenerDatoJson(descripcion,estadistica,derecho,otros,posicion,iva,valorAduana,valorFlete){
-         //guardar los datos en un array
+        //guardar los datos en un array
         let calcularBaseImpositiva;
         let agregarIva,porcentajeIva,calcularIva;
 
@@ -157,11 +166,9 @@ class CalculadoraImpuestos{
                         //baseImp.innerHTML = `<h4>$${calcularBaseImpositiva}</h4>`;
                         baseImpIva.innerHTML = `<h4>IMPUESTOS:U$D${calcularIva}</h4>`;
                         let total =parseFloat(valorFlete + parseFloat(calcularIva)); 
-                        console.log(total);
-                        console.log(typeof valorFlete);
-                        console.log(typeof calcularIva);
                         totalPrecio.innerHTML = `<h4 class=" text-warning">COSTO TOTAL DEL ENVIO: U$D ${total}</h4>`
-                     }
+                        this.cambioMoneda(total);
+                    }
                     
 
                  }
@@ -183,6 +190,47 @@ class CalculadoraImpuestos{
            envios.appendChild(optionElement);
         });
         envios.selectedIndex = 0;
+    }
+    async obtenerDolarOficial(){
+        const url = "https://dolarapi.com/v1/dolares/oficial";
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                console.log('Error al obtener el tipo de cambio oficial del dólar');
+                return 0;
+            }
+            const data = await response.json();
+            cotizacion_dolar = data["venta"];
+            console.log("Tipo de cambio oficial del dólar:", cotizacion_dolar);
+            return cotizacion_dolar;
+        } catch (error) {
+            console.error('Se produjo un error:', error);
+            return 0;
+        }
+    }
+    cambioMoneda(valorDolar){
+      this.obtenerDolarOficial()
+      .then(valor => {
+         let cotizacion_if_fail = 885
+         let valor_de_cobertura = 10;
+         cotizacion_dolar = valor + valor_de_cobertura;
+         //valor pasado por parametro
+         if(!isNaN(valorDolar)){
+            let calcularAPeso = parseFloat(valorDolar * cotizacion_dolar); //total en pesos
+            resultadoPesos.innerHTML = `<h3>COSTO TOTAL EN PESOS: $${calcularAPeso}</h3>`;
+         }
+       
+         if (cotizacion_dolar === 0) {
+             cotizacion_dolar = cotizacion_if_fail;
+         }
+
+     })
+     .catch(error => {
+         console.error('Se produjo un error:', error);
+         cotizacion_dolar = cotizacion_if_fail
+      });
+
+     
     }
    
 
