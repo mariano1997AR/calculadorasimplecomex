@@ -58,7 +58,7 @@ class CalculadoraImpuestos{
                     let valorFlete = this.valorFlete(this.peso);
                     //clase css
                     resultadoFlete.classList.add('linea-horizontal');
-                    resultadoFlete.innerHTML = `<h4>FLETE: U$D ${valorFlete}</h4>`;
+                    resultadoFlete.innerHTML = `<h4>HANDLING: U$D ${valorFlete}</h4>`;
                    // resultadoSeguro.innerHTML = `<h4>Seguro: $${calcularSeguro}</h4>`;
                    // baseCalculo.innerHTML = `<h4>$${valorAduana}</h4>`;
                     this.obtenerDatoJson(descripcion,estadistica,derecho,otros,posicion,iva,valorAduana,valorFlete);
@@ -81,7 +81,7 @@ class CalculadoraImpuestos{
       
     }
     valorFlete(peso){
-       let precioEnvioFijo = 4; //en dolares
+       let precioEnvioFijo = 30; //en dolares
        let flete = peso * precioEnvioFijo;
        return  flete;
 
