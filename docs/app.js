@@ -44,7 +44,7 @@ class CalculadoraImpuestos{
 
     //creamos los siguientes metodos;
    procesarDatos(descripcion,derecho,estadistica,otros,posicion,iva){
-     const datosEnvios = ["entrega en capital","entrega en provincia bsas", "retiro en aerobox","Envio al interior domicilio"];
+     const datosEnvios = ["entrega en capital","entrega en provincia bsas", "retiro en simplecomex","Envio al interior domicilio"];
 
 
      calcular.addEventListener('click',() =>{
