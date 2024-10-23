@@ -19,6 +19,9 @@ const totalPrecio = document.getElementById('total-precio');
 //es para calcular el valor en pesos de dolares
 const resultadoPesos = document.getElementById('total-precio-pesos');
 
+//valor handling
+const handling = document.getElementById('handling'); 
+
 //variable global al programa 
 var cotizacion_dolar;
 
@@ -48,7 +51,7 @@ class CalculadoraImpuestos{
 
 
      calcular.addEventListener('click',() =>{
-    
+                let valorHandling = 30;
                 if(isNaN(this.peso) || isNaN(this.valor)){
                     console.log('campo vacio')
                 }else{
@@ -58,8 +61,9 @@ class CalculadoraImpuestos{
                     let valorFlete = this.valorFlete(this.peso);
                     //clase css
                     resultadoFlete.classList.add('linea-horizontal');
-                    resultadoFlete.innerHTML = `<h4>HANDLING: U$D ${valorFlete}</h4>`;
-                   // resultadoSeguro.innerHTML = `<h4>Seguro: $${calcularSeguro}</h4>`;
+                    resultadoFlete.innerHTML = `<h4>FLETE: U$D ${valorFlete}</h4>`;
+                    handling.innerHTML = `<h4>HANDLING: U$D ${valorHandling}</h4>`
+                    // resultadoSeguro.innerHTML = `<h4>Seguro: $${calcularSeguro}</h4>`;
                    // baseCalculo.innerHTML = `<h4>$${valorAduana}</h4>`;
                     this.obtenerDatoJson(descripcion,estadistica,derecho,otros,posicion,iva,valorAduana,valorFlete);
     
