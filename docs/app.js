@@ -22,6 +22,9 @@ const resultadoPesos = document.getElementById('total-precio-pesos');
 //valor handling
 const handling = document.getElementById('handling'); 
 
+//valor envio
+const valorEnvio = document.getElementById('valorEnvio');
+
 //variable global al programa 
 var cotizacion_dolar;
 
@@ -47,11 +50,11 @@ class CalculadoraImpuestos{
 
     //creamos los siguientes metodos;
    procesarDatos(descripcion,derecho,estadistica,otros,posicion,iva){
-     const datosEnvios = ["entrega en capital","entrega en provincia bsas", "retiro en simplecomex","Envio al interior domicilio"];
+     const datosEnvios = ["entrega en simplecomex","entrega en caba", "Entrega en pba"];
 
 
      calcular.addEventListener('click',() =>{
-                let valorHandling = 30;
+                const valorHandling = 30;
                 if(isNaN(this.peso) || isNaN(this.valor)){
                     console.log('campo vacio')
                 }else{
@@ -59,10 +62,13 @@ class CalculadoraImpuestos{
                     let calcularSeguro = this.calcularSeguro(calcularFlete,this.valor);            
                     let valorAduana = this.calcularBaseCalculo(this.valor, calcularFlete,calcularSeguro);
                     let valorFlete = this.valorFlete(this.peso);
+                    let calcularEnvio = this.calcularValorEnvio(datosEnvios);
+                    console.log(calcularEnvio);
                     //clase css
                     resultadoFlete.classList.add('linea-horizontal');
                     resultadoFlete.innerHTML = `<h4>FLETE: U$D ${valorFlete}</h4>`;
-                    handling.innerHTML = `<h4>HANDLING: U$D ${valorHandling}</h4>`
+                    handling.innerHTML = `<h4>HANDLING: U$D ${valorHandling}</h4>`;
+                    valorEnvio.innerHTML =`<h4>ENVIO: U$D ${calcularEnvio}</h4>`
                     // resultadoSeguro.innerHTML = `<h4>Seguro: $${calcularSeguro}</h4>`;
                    // baseCalculo.innerHTML = `<h4>$${valorAduana}</h4>`;
                     this.obtenerDatoJson(descripcion,estadistica,derecho,otros,posicion,iva,valorAduana,valorFlete);
@@ -101,6 +107,29 @@ class CalculadoraImpuestos{
 
     calcularBaseCalculo(valor,flete,seguro){
           return valor + flete + seguro;
+    }
+
+
+    calcularValorEnvio(datos){
+        const impuesto = [0,15,20];
+        //entrega en simplecomex -> oficina 0
+        //entrega en caba --> 15
+        //entrega en pba -> 20
+        let guardar;
+         datos.map((dato,index) =>{
+            if(index === 0){
+                 guardar = impuesto[0];
+            }else if(index === 1){
+                 guardar = impuesto[1];
+            }else if(index === 2){
+                 guardar = impuesto[2];
+            }
+
+        })
+        return guardar;
+
+      
+     
     }
 
     recorrerSelectDatosProducto(descripcion){
@@ -194,6 +223,7 @@ class CalculadoraImpuestos{
            envios.appendChild(optionElement);
         });
         envios.selectedIndex = 0;
+       
     }
     async obtenerDolarOficial(){
         const url = "https://dolarapi.com/v1/dolares/oficial";
