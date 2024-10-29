@@ -63,7 +63,7 @@ class CalculadoraImpuestos{
                     let valorAduana = this.calcularBaseCalculo(this.valor, calcularFlete,calcularSeguro);
                     let valorFlete = this.valorFlete(this.peso);
                     let calcularEnvio = this.calcularValorEnvio(datosEnvios);
-                    console.log(calcularEnvio);
+                    //console.log(calcularEnvio);
                     //clase css
                     resultadoFlete.classList.add('linea-horizontal');
                     resultadoFlete.innerHTML = `<h4>FLETE: U$D ${valorFlete}</h4>`;
@@ -71,7 +71,7 @@ class CalculadoraImpuestos{
                     valorEnvio.innerHTML =`<h4>ENVIO: U$D ${calcularEnvio}</h4>`
                     // resultadoSeguro.innerHTML = `<h4>Seguro: $${calcularSeguro}</h4>`;
                    // baseCalculo.innerHTML = `<h4>$${valorAduana}</h4>`;
-                    this.obtenerDatoJson(descripcion,estadistica,derecho,otros,posicion,iva,valorAduana,valorFlete);
+                    this.obtenerDatoJson(descripcion,estadistica,derecho,otros,posicion,iva,valorAduana,valorFlete,calcularEnvio);
     
                 }
           
@@ -166,7 +166,7 @@ class CalculadoraImpuestos{
        });
     }
 
-    obtenerDatoJson(descripcion,estadistica,derecho,otros,posicion,iva,valorAduana,valorFlete){
+    obtenerDatoJson(descripcion,estadistica,derecho,otros,posicion,iva,valorAduana,valorFlete,calcularEnvio){
         //guardar los datos en un array
         let calcularBaseImpositiva;
         let agregarIva,porcentajeIva,calcularIva;
@@ -198,7 +198,7 @@ class CalculadoraImpuestos{
                      }else{
                         //baseImp.innerHTML = `<h4>$${calcularBaseImpositiva}</h4>`;
                         baseImpIva.innerHTML = `<h4>IMPUESTOS:U$D${calcularIva}</h4>`;
-                        let total =parseFloat(valorFlete + parseFloat(calcularIva)); 
+                        let total =parseFloat(valorFlete + parseFloat(calcularIva) + calcularEnvio); 
                         totalPrecio.innerHTML = `<h4 class=" text-warning">COSTO TOTAL DEL ENVIO: U$D ${total}</h4>`
                         this.cambioMoneda(total);
                     }
